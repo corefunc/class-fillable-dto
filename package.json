@@ -1,0 +1,20 @@
+{
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/corefunc/class-fillable-dto/issues"
+  },
+  "description": "",
+  "homepage": "https://github.com/corefunc/class-fillable-dto#readme",
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "class-fillable-dto",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/corefunc/class-fillable-dto.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
+}
