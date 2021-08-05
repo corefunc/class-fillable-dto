@@ -1,20 +1,55 @@
 {
-  "author": "",
+  "author": "Anton Trofimenko",
   "bugs": {
     "url": "https://github.com/corefunc/class-fillable-dto/issues"
   },
-  "description": "",
+  "contributors": [
+    {
+      "email": "r37r0m0d3l@protonmail.com",
+      "name": "Anton Trofimenko"
+    }
+  ],
+  "dependencies": {
+    "@corefunc/corefunc": "0.3.*",
+    "@corefunc/v8": "0.1.*",
+    "class-transformer": "0.4.*",
+    "class-validator": "0.13.*"
+  },
+  "description": "Fillable DTO with validation",
+  "devDependencies": {
+    "prettier": "2.3.*"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "engineStrict": true,
+  "files": [
+    "index.cjs",
+    "index.d.ts",
+    "index.js",
+    "index.js",
+    "index.js.map",
+    "index.mjs",
+    "index.ts"
+  ],
   "homepage": "https://github.com/corefunc/class-fillable-dto#readme",
-  "keywords": [],
-  "license": "ISC",
-  "main": "index.js",
-  "name": "class-fillable-dto",
+  "keywords": [
+    "dto",
+    "util,",
+    "utilities"
+  ],
+  "license": "MIT",
+  "main": "index.cjs",
+  "module": "index.mjs",
+  "name": "@corefunc/class-fillable-dto",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/corefunc/class-fillable-dto.git"
   },
   "scripts": {
+    "package:upgrade": "npx npm-check --update",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "types": "index.d.ts",
   "version": "1.0.0"
 }

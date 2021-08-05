@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["ES2017"],
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "resolveJsonModule": false,
+    "strict": true,
+    "target": "ES2017",
+    "sourceMap": true
+  },
+  "exclude": ["node_modules"]
+}
