@@ -25,9 +25,6 @@ const OPTIONS_DEFAULT = {
  * ```
  */
 export class FillableDto {
-  static factory(attributes, includeKeys) {
-    return new FillableDto(attributes, includeKeys);
-  }
   static fromJSON(json) {
     return this.fromPlain(JSON.parse(json));
   }

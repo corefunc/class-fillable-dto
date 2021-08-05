@@ -31,13 +31,7 @@ const OPTIONS_DEFAULT: IOptions = {
  * }
  * ```
  */
-export abstract class FillableDto {
-  public static factory(
-    attributes?: Partial<FillableDto> | Record<string, any>,
-    includeKeys?: string[]
-  ): Record<string, any> {
-    return new (FillableDto as any)(attributes, includeKeys);
-  }
+export class FillableDto {
   public static fromJSON<Type extends typeof FillableDto>(
     this: Type,
     json: string

@@ -1,6 +1,6 @@
 # Class Fillable DTO
 
-Abstract class Fillable DTO with validation functionality.
+Class Fillable DTO with validation functionality.
 
 ## See also
 
