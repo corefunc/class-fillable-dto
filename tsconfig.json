@@ -11,6 +11,7 @@
     "noUnusedLocals": true,
     "resolveJsonModule": false,
     "strict": true,
+    "strictPropertyInitialization": false,
     "target": "ES2017",
     "sourceMap": true
   },

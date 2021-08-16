@@ -20,27 +20,26 @@
     "prettier": "2.3.*"
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=12.0.0",
+    "npm": ">=6.0.0"
   },
   "engineStrict": true,
   "files": [
-    "index.cjs",
     "index.d.ts",
     "index.js",
     "index.js",
     "index.js.map",
-    "index.mjs",
     "index.ts"
   ],
   "homepage": "https://github.com/corefunc/class-fillable-dto#readme",
   "keywords": [
     "dto",
+    "nodejs-only",
     "util,",
     "utilities"
   ],
   "license": "MIT",
   "main": "index.cjs",
-  "module": "index.mjs",
   "name": "@corefunc/class-fillable-dto",
   "repository": {
     "type": "git",
@@ -51,5 +50,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "types": "index.d.ts",
-  "version": "1.0.1"
+  "version": "1.0.2"
 }

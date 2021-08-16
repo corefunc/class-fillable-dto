@@ -1,8 +1,14 @@
 import { classToPlain, plainToClass } from "class-transformer";
-import { cloneMarshalling } from "@corefunc/v8/clone/clone-marshalling";
 import { isBoolean, isObject, validateSync } from "class-validator";
+
+import { arraySortStrings } from "@corefunc/corefunc/array/sort/strings";
+import { checkIsObjectLike } from "@corefunc/corefunc/check/is-object-like";
+import { isString } from "@corefunc/corefunc/is/string";
 import { jsonStringifySafe } from "@corefunc/corefunc/json/stringify/safe";
+import { objectBasicLock } from "@corefunc/corefunc/object/basic/lock";
 import { textCaseCapitalize } from "@corefunc/corefunc/text/case/capitalize";
+
+import { cloneMarshalling } from "@corefunc/v8/clone/clone-marshalling";
 
 export interface IOptions {
   class: boolean;
@@ -23,39 +29,25 @@ const OPTIONS_DEFAULT: IOptions = {
  * Classes extended from `FillableDto` shouldn't have default values for class members.
  * Use constructor instead.
  * @example ```
- * public constructor(attributes: IMyAttributes) {
- *   super(attributes);
- *   if (this.isValid === undefined) {
- *     this.isValid = false;
- *   }
+ * export class ErrorDto extends FillableDto {
+ *  public readonly message: string;
  * }
  * ```
  */
-export class FillableDto {
-  public static fromJSON<Type extends typeof FillableDto>(
-    this: Type,
-    json: string
-  ): InstanceType<Type> {
+export abstract class FillableDto {
+  public static fromJSON<Type extends typeof FillableDto>(this: Type, json: string): InstanceType<Type> {
     return this.fromPlain(JSON.parse(json));
   }
-  public static fromPlain<Type extends typeof FillableDto>(
-    this: Type,
-    plain: Record<string, any>
-  ): InstanceType<Type> {
+  public static fromPlain<Type extends typeof FillableDto>(this: Type, plain: Record<string, any>): InstanceType<Type> {
     // @ts-ignore
     return plainToClass(this, plain) as InstanceType<Type>;
   }
-  /**
-   * @constructor
-   * @param {Object=} attributes Data Transfer Object attributes to be set
-   * @param {Array.<String>=} includeKeys Include only specific properties
-   * @protected
-   */
   public constructor(
     attributes?: Partial<FillableDto> | Record<string, any>,
-    includeKeys?: string[]
+    includeKeys?: string[],
+    defaultValues?: Record<string, any>,
   ) {
-    this.assign(attributes, includeKeys);
+    this.assignAll(attributes, includeKeys, defaultValues);
   }
   public toJSON(): Record<string, any> {
     return this.toObject();
@@ -95,46 +87,6 @@ export class FillableDto {
       .join(" ");
     throw new Error(errorText);
   }
-  protected assign(
-    attributes?: Record<string, any>,
-    includeKeys?: string[]
-  ): this {
-    if (!attributes) {
-      return this;
-    }
-    let keys;
-    if (includeKeys) {
-      keys = includeKeys;
-    } else {
-      keys = Object.keys(attributes);
-    }
-    keys.forEach((key) => {
-      if (key in attributes) {
-        // Trigger key setter for object instance
-        // @ts-ignore
-        this[key] = cloneMarshalling(attributes[key]);
-      }
-    });
-    return this;
-  }
-  protected assignDefault(
-    key: string,
-    value: any,
-    skipIfKeyNotInObject = false,
-    setOnlyIfUndefined = true
-  ): this {
-    const isKeyInObject = key in this;
-    if (skipIfKeyNotInObject && !isKeyInObject) {
-      return this;
-    }
-    // @ts-ignore
-    if (setOnlyIfUndefined && this[key] !== undefined) {
-      return this;
-    }
-    // @ts-ignore
-    this[key] = cloneMarshalling(value);
-    return this;
-  }
   public getError(options?: IOptions): null | string {
     const errors = this.getErrors(options);
     if (errors.length === 0) {
@@ -173,9 +125,7 @@ export class FillableDto {
       let message;
       if (opts.prettify) {
         const failedPretty = Object.values(constraints)
-          .map((text) =>
-            String(text).replace(error.property, `[${error.property}]`).trim()
-          )
+          .map((text) => String(text).replace(error.property, `[${error.property}]`).trim())
           .map((text) => textCaseCapitalize(String(text)))
           .map((text) => String(text).trim())
           .join(". ");
@@ -187,6 +137,93 @@ export class FillableDto {
       }
       return `${where} ${property} ${value} ${message}`.trim();
     });
+  }
+  public lock(): void {
+    objectBasicLock(this);
+  }
+  protected assignAll(
+    attributes?: Partial<FillableDto> | Record<string, any>,
+    includeKeys?: string[],
+    defaultValues?: Record<string, any>,
+  ): void {
+    const assignAttributes: Record<string, any> | undefined = this.buildAssignAttributes(attributes);
+    const includeKeysList = this.buildIncludeKeys(includeKeys);
+    this.assignAttributes(assignAttributes, includeKeysList);
+    this.assignDefaults(defaultValues, includeKeysList);
+  }
+  protected assignAttributes(attributes?: Record<string, any>, includeKeys?: string[]): this {
+    if (!attributes) {
+      return this;
+    }
+    let keys;
+    if (includeKeys) {
+      keys = includeKeys;
+    } else {
+      keys = Object.keys(attributes);
+    }
+    keys.forEach((key) => {
+      if (key in attributes) {
+        // Trigger key setter for object instance
+        // @ts-ignore
+        this[key] = cloneMarshalling(attributes[key]);
+      }
+    });
+    return this;
+  }
+  protected assignDefaults(defaultValues?: Record<string, any>, includeKeys?: string[]): this {
+    if (defaultValues && checkIsObjectLike(defaultValues)) {
+      if (includeKeys) {
+        Object.keys(defaultValues).forEach((key: string) => {
+          if (includeKeys.includes(key)) {
+            this.assignDefaultProperty(key, defaultValues[key]);
+          }
+        });
+      } else {
+        Object.keys(defaultValues).forEach((key: string) => {
+          this.assignDefaultProperty(key, defaultValues[key]);
+        });
+      }
+    }
+    return this;
+  }
+  protected assignDefaultProperty(
+    key: string,
+    value: any,
+    skipIfKeyNotInObject = false,
+    setOnlyIfUndefined = true,
+  ): this {
+    const isKeyInObject = key in this;
+    if (skipIfKeyNotInObject && !isKeyInObject) {
+      return this;
+    }
+    // @ts-ignore
+    if (setOnlyIfUndefined && this[key] !== undefined) {
+      return this;
+    }
+    // @ts-ignore
+    this[key] = cloneMarshalling(value);
+    return this;
+  }
+  private buildAssignAttributes(
+    attributes?: Partial<FillableDto> | Record<string, any>,
+  ): Record<string, any> | undefined {
+    let assignAttributes: Record<string, any> | undefined;
+    if (checkIsObjectLike(attributes)) {
+      assignAttributes = classToPlain(cloneMarshalling(this));
+    } else {
+      assignAttributes = undefined;
+    }
+    return assignAttributes;
+  }
+  private buildIncludeKeys(includeKeys?: string[]): string[] | undefined {
+    if (!includeKeys || !Array.isArray(includeKeys)) {
+      return undefined;
+    }
+    const keys = Array.from(new Set(includeKeys).values()).filter(isString);
+    if (keys.length === 0) {
+      return undefined;
+    }
+    return arraySortStrings(keys);
   }
   private buildOptions(options: any): IOptions {
     if (!options) {
