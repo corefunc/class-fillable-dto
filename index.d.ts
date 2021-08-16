@@ -18,13 +18,14 @@ export declare abstract class FillableDto {
     static fromJSON<Type extends typeof FillableDto>(this: Type, json: string): InstanceType<Type>;
     static fromPlain<Type extends typeof FillableDto>(this: Type, plain: Record<string, any>): InstanceType<Type>;
     constructor(attributes?: Partial<FillableDto> | Record<string, any>, includeKeys?: string[], defaultValues?: Record<string, any>);
+    assign(attributes?: Partial<FillableDto> | Record<string, any>, includeKeys?: string[], defaultValues?: Record<string, any>): this;
+    getError(options?: IOptions): null | string;
+    getErrors(options?: IOptions): string[];
+    isValid(silent?: boolean): boolean;
+    lock(): void;
     toJSON(): Record<string, any>;
     toObject(): Record<string, any>;
     toString(): string;
-    isValid(silent?: boolean): boolean;
-    getError(options?: IOptions): null | string;
-    getErrors(options?: IOptions): string[];
-    lock(): void;
     protected assignAll(attributes?: Partial<FillableDto> | Record<string, any>, includeKeys?: string[], defaultValues?: Record<string, any>): void;
     protected assignAttributes(attributes?: Record<string, any>, includeKeys?: string[]): this;
     protected assignDefaults(defaultValues?: Record<string, any>, includeKeys?: string[]): this;

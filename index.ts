@@ -49,43 +49,13 @@ export abstract class FillableDto {
   ) {
     this.assignAll(attributes, includeKeys, defaultValues);
   }
-  public toJSON(): Record<string, any> {
-    return this.toObject();
-  }
-  public toObject(): Record<string, any> {
-    return classToPlain(cloneMarshalling(this));
-  }
-  public toString(): string {
-    return jsonStringifySafe(this.toObject());
-  }
-  public isValid(silent: boolean = false): boolean {
-    const validationErrors = validateSync(this);
-    if (silent) {
-      return Boolean(validationErrors.length === 0);
-    }
-    if (validationErrors.length === 0) {
-      return true;
-    }
-    const constructorName = this.constructor.name;
-    const errorText = validationErrors
-      .map(function errorToSentence(error): string {
-        const constraints = {};
-        if ("constraints" in error) {
-          Object.assign(constraints, error.constraints);
-        } else if ("children" in error) {
-          return (error.children || []).map(errorToSentence).join(" ");
-        }
-        const failed = `${Object.values(constraints)
-          .map((text) => `${textCaseCapitalize(String(text))}`)
-          .join(". ")}`;
-        const where = `Error in [${constructorName}].`;
-        const property = `Property [${error.property}].`;
-        const value = `Value is [${jsonStringifySafe(error.value)}].`;
-        const message = `Failed: ${failed}.`;
-        return `${where} ${property} ${value} ${message}`;
-      })
-      .join(" ");
-    throw new Error(errorText);
+  public assign(
+    attributes?: Partial<FillableDto> | Record<string, any>,
+    includeKeys?: string[],
+    defaultValues?: Record<string, any>,
+  ): this {
+    this.assignAll(attributes, includeKeys, defaultValues);
+    return this;
   }
   public getError(options?: IOptions): null | string {
     const errors = this.getErrors(options);
@@ -138,8 +108,46 @@ export abstract class FillableDto {
       return `${where} ${property} ${value} ${message}`.trim();
     });
   }
+  public isValid(silent: boolean = false): boolean {
+    const validationErrors = validateSync(this);
+    if (silent) {
+      return Boolean(validationErrors.length === 0);
+    }
+    if (validationErrors.length === 0) {
+      return true;
+    }
+    const constructorName = this.constructor.name;
+    const errorText = validationErrors
+      .map(function errorToSentence(error): string {
+        const constraints = {};
+        if ("constraints" in error) {
+          Object.assign(constraints, error.constraints);
+        } else if ("children" in error) {
+          return (error.children || []).map(errorToSentence).join(" ");
+        }
+        const failed = `${Object.values(constraints)
+          .map((text) => `${textCaseCapitalize(String(text))}`)
+          .join(". ")}`;
+        const where = `Error in [${constructorName}].`;
+        const property = `Property [${error.property}].`;
+        const value = `Value is [${jsonStringifySafe(error.value)}].`;
+        const message = `Failed: ${failed}.`;
+        return `${where} ${property} ${value} ${message}`;
+      })
+      .join(" ");
+    throw new Error(errorText);
+  }
   public lock(): void {
     objectBasicLock(this);
+  }
+  public toJSON(): Record<string, any> {
+    return this.toObject();
+  }
+  public toObject(): Record<string, any> {
+    return classToPlain(cloneMarshalling(this));
+  }
+  public toString(): string {
+    return jsonStringifySafe(this.toObject());
   }
   protected assignAll(
     attributes?: Partial<FillableDto> | Record<string, any>,

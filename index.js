@@ -37,44 +37,9 @@ class FillableDto {
     constructor(attributes, includeKeys, defaultValues) {
         this.assignAll(attributes, includeKeys, defaultValues);
     }
-    toJSON() {
-        return this.toObject();
-    }
-    toObject() {
-        return class_transformer_1.classToPlain(clone_marshalling_1.cloneMarshalling(this));
-    }
-    toString() {
-        return safe_1.jsonStringifySafe(this.toObject());
-    }
-    isValid(silent = false) {
-        const validationErrors = class_validator_1.validateSync(this);
-        if (silent) {
-            return Boolean(validationErrors.length === 0);
-        }
-        if (validationErrors.length === 0) {
-            return true;
-        }
-        const constructorName = this.constructor.name;
-        const errorText = validationErrors
-            .map(function errorToSentence(error) {
-            const constraints = {};
-            if ("constraints" in error) {
-                Object.assign(constraints, error.constraints);
-            }
-            else if ("children" in error) {
-                return (error.children || []).map(errorToSentence).join(" ");
-            }
-            const failed = `${Object.values(constraints)
-                .map((text) => `${capitalize_1.textCaseCapitalize(String(text))}`)
-                .join(". ")}`;
-            const where = `Error in [${constructorName}].`;
-            const property = `Property [${error.property}].`;
-            const value = `Value is [${safe_1.jsonStringifySafe(error.value)}].`;
-            const message = `Failed: ${failed}.`;
-            return `${where} ${property} ${value} ${message}`;
-        })
-            .join(" ");
-        throw new Error(errorText);
+    assign(attributes, includeKeys, defaultValues) {
+        this.assignAll(attributes, includeKeys, defaultValues);
+        return this;
     }
     getError(options) {
         const errors = this.getErrors(options);
@@ -129,8 +94,47 @@ class FillableDto {
             return `${where} ${property} ${value} ${message}`.trim();
         });
     }
+    isValid(silent = false) {
+        const validationErrors = class_validator_1.validateSync(this);
+        if (silent) {
+            return Boolean(validationErrors.length === 0);
+        }
+        if (validationErrors.length === 0) {
+            return true;
+        }
+        const constructorName = this.constructor.name;
+        const errorText = validationErrors
+            .map(function errorToSentence(error) {
+            const constraints = {};
+            if ("constraints" in error) {
+                Object.assign(constraints, error.constraints);
+            }
+            else if ("children" in error) {
+                return (error.children || []).map(errorToSentence).join(" ");
+            }
+            const failed = `${Object.values(constraints)
+                .map((text) => `${capitalize_1.textCaseCapitalize(String(text))}`)
+                .join(". ")}`;
+            const where = `Error in [${constructorName}].`;
+            const property = `Property [${error.property}].`;
+            const value = `Value is [${safe_1.jsonStringifySafe(error.value)}].`;
+            const message = `Failed: ${failed}.`;
+            return `${where} ${property} ${value} ${message}`;
+        })
+            .join(" ");
+        throw new Error(errorText);
+    }
     lock() {
         lock_1.objectBasicLock(this);
+    }
+    toJSON() {
+        return this.toObject();
+    }
+    toObject() {
+        return class_transformer_1.classToPlain(clone_marshalling_1.cloneMarshalling(this));
+    }
+    toString() {
+        return safe_1.jsonStringifySafe(this.toObject());
     }
     assignAll(attributes, includeKeys, defaultValues) {
         const assignAttributes = this.buildAssignAttributes(attributes);
