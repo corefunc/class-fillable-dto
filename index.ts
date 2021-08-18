@@ -35,9 +35,11 @@ const OPTIONS_DEFAULT: IOptions = {
  * ```
  */
 export abstract class FillableDto {
+  // @ts-ignore
   public static fromJSON<Type extends typeof FillableDto>(this: Type, json: string): InstanceType<Type> {
     return this.fromPlain(JSON.parse(json));
   }
+  // @ts-ignore
   public static fromPlain<Type extends typeof FillableDto>(this: Type, plain: Record<string, any>): InstanceType<Type> {
     // @ts-ignore
     return plainToClass(this, plain) as InstanceType<Type>;

@@ -27,9 +27,11 @@ const OPTIONS_DEFAULT = {
  * ```
  */
 class FillableDto {
+    // @ts-ignore
     static fromJSON(json) {
         return this.fromPlain(JSON.parse(json));
     }
+    // @ts-ignore
     static fromPlain(plain) {
         // @ts-ignore
         return class_transformer_1.plainToClass(this, plain);

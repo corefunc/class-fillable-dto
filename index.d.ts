@@ -15,7 +15,9 @@ export interface IOptions {
  * ```
  */
 export declare abstract class FillableDto {
+    // @ts-ignore
     static fromJSON<Type extends typeof FillableDto>(this: Type, json: string): InstanceType<Type>;
+    // @ts-ignore
     static fromPlain<Type extends typeof FillableDto>(this: Type, plain: Record<string, any>): InstanceType<Type>;
     constructor(attributes?: Partial<FillableDto> | Record<string, any>, includeKeys?: string[], defaultValues?: Record<string, any>);
     assign(attributes?: Partial<FillableDto> | Record<string, any>, includeKeys?: string[], defaultValues?: Record<string, any>): this;
