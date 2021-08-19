@@ -197,7 +197,7 @@ class FillableDto {
     buildAssignAttributes(attributes) {
         let assignAttributes;
         if (is_object_like_1.checkIsObjectLike(attributes)) {
-            assignAttributes = class_transformer_1.classToPlain(clone_marshalling_1.cloneMarshalling(this));
+            assignAttributes = class_transformer_1.classToPlain(clone_marshalling_1.cloneMarshalling(attributes));
         }
         else {
             assignAttributes = undefined;

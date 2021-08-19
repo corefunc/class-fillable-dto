@@ -214,18 +214,18 @@ export abstract class FillableDto {
     this[key] = cloneMarshalling(value);
     return this;
   }
-  private buildAssignAttributes(
+  protected buildAssignAttributes(
     attributes?: Partial<FillableDto> | Record<string, any>,
   ): Record<string, any> | undefined {
     let assignAttributes: Record<string, any> | undefined;
     if (checkIsObjectLike(attributes)) {
-      assignAttributes = classToPlain(cloneMarshalling(this));
+      assignAttributes = classToPlain(cloneMarshalling(attributes));
     } else {
       assignAttributes = undefined;
     }
     return assignAttributes;
   }
-  private buildIncludeKeys(includeKeys?: string[]): string[] | undefined {
+  protected buildIncludeKeys(includeKeys?: string[]): string[] | undefined {
     if (!includeKeys || !Array.isArray(includeKeys)) {
       return undefined;
     }
@@ -235,7 +235,7 @@ export abstract class FillableDto {
     }
     return arraySortStrings(keys);
   }
-  private buildOptions(options: any): IOptions {
+  protected buildOptions(options: any): IOptions {
     if (!options) {
       return OPTIONS_DEFAULT;
     }
