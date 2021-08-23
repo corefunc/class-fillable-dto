@@ -40,21 +40,24 @@ export abstract class FillableDto {
     return this.fromPlain(JSON.parse(json));
   }
   // @ts-ignore
-  public static fromPlain<Type extends typeof FillableDto>(this: Type, plain: Record<string, any>): InstanceType<Type> {
+  public static fromPlain<Type extends typeof FillableDto>(
+    this: Type,
+    plain: Record<string, any> | Readonly<Record<string, any>>,
+  ): InstanceType<Type> {
     // @ts-ignore
     return plainToClass(this, plain) as InstanceType<Type>;
   }
   public constructor(
-    attributes?: Partial<FillableDto> | Record<string, any>,
-    includeKeys?: string[],
-    defaultValues?: Record<string, any>,
+    attributes?: Record<string, any> | Readonly<Record<string, any>>,
+    includeKeys?: string[] | ReadonlyArray<string>,
+    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
   ) {
     this.assignAll(attributes, includeKeys, defaultValues);
   }
   public assign(
-    attributes?: Partial<FillableDto> | Record<string, any>,
-    includeKeys?: string[],
-    defaultValues?: Record<string, any>,
+    attributes?: Record<string, any> | Readonly<Record<string, any>>,
+    includeKeys?: string[] | ReadonlyArray<string>,
+    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
   ): this {
     this.assignAll(attributes, includeKeys, defaultValues);
     return this;
@@ -152,16 +155,16 @@ export abstract class FillableDto {
     return jsonStringifySafe(this.toObject());
   }
   protected assignAll(
-    attributes?: Partial<FillableDto> | Record<string, any>,
-    includeKeys?: string[],
-    defaultValues?: Record<string, any>,
+    attributes?: Record<string, any> | Readonly<Record<string, any>>,
+    includeKeys?: string[] | ReadonlyArray<string>,
+    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
   ): void {
     const assignAttributes: Record<string, any> | undefined = this.buildAssignAttributes(attributes);
     const includeKeysList = this.buildIncludeKeys(includeKeys);
     this.assignAttributes(assignAttributes, includeKeysList);
     this.assignDefaults(defaultValues, includeKeysList);
   }
-  protected assignAttributes(attributes?: Record<string, any>, includeKeys?: string[]): this {
+  protected assignAttributes(attributes?: Record<string, any>, includeKeys?: string[] | ReadonlyArray<string>): this {
     if (!attributes) {
       return this;
     }
@@ -180,7 +183,10 @@ export abstract class FillableDto {
     });
     return this;
   }
-  protected assignDefaults(defaultValues?: Record<string, any>, includeKeys?: string[]): this {
+  protected assignDefaults(
+    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
+    includeKeys?: string[] | ReadonlyArray<string>,
+  ): this {
     if (defaultValues && checkIsObjectLike(defaultValues)) {
       if (includeKeys) {
         Object.keys(defaultValues).forEach((key: string) => {
@@ -215,7 +221,7 @@ export abstract class FillableDto {
     return this;
   }
   protected buildAssignAttributes(
-    attributes?: Partial<FillableDto> | Record<string, any>,
+    attributes?: Record<string, any> | Readonly<Record<string, any>>,
   ): Record<string, any> | undefined {
     let assignAttributes: Record<string, any> | undefined;
     if (checkIsObjectLike(attributes)) {
@@ -225,7 +231,7 @@ export abstract class FillableDto {
     }
     return assignAttributes;
   }
-  protected buildIncludeKeys(includeKeys?: string[]): string[] | undefined {
+  protected buildIncludeKeys(includeKeys?: string[] | ReadonlyArray<string>): string[] | undefined {
     if (!includeKeys || !Array.isArray(includeKeys)) {
       return undefined;
     }
@@ -235,7 +241,7 @@ export abstract class FillableDto {
     }
     return arraySortStrings(keys);
   }
-  protected buildOptions(options: any): IOptions {
+  protected buildOptions(options?: any): IOptions {
     if (!options) {
       return OPTIONS_DEFAULT;
     }
