@@ -27,7 +27,6 @@
   "files": [
     "index.d.ts",
     "index.js",
-    "index.js",
     "index.js.map",
     "index.ts"
   ],
@@ -39,7 +38,7 @@
     "utilities"
   ],
   "license": "MIT",
-  "main": "index.cjs",
+  "main": "index.js",
   "name": "@corefunc/class-fillable-dto",
   "repository": {
     "type": "git",
@@ -50,5 +49,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "types": "index.d.ts",
-  "version": "1.0.5"
+  "version": "1.0.6"
 }
