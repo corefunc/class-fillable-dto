@@ -16,29 +16,29 @@ export interface IOptions {
  */
 export declare abstract class FillableDto {
   // @ts-ignore
-  static fromJSON<Type extends typeof FillableDto>(this: Type, json: string): InstanceType<Type>;
+  public static fromJSON<Type extends typeof FillableDto>(this: Type, json: string): InstanceType<Type>;
   // @ts-ignore
-  static fromPlain<Type extends typeof FillableDto>(
+  public static fromPlain<Type extends typeof FillableDto>(
     this: Type,
     plain: Record<string, any> | Readonly<Record<string, any>>,
   ): InstanceType<Type>;
-  constructor(
+  public constructor(
     attributes?: Record<string, any> | Readonly<Record<string, any>>,
     includeKeys?: string[] | ReadonlyArray<string>,
     defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
   );
-  assign(
+  public assign(
     attributes?: Record<string, any> | Readonly<Record<string, any>>,
     includeKeys?: string[] | ReadonlyArray<string>,
     defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
   ): this;
-  getError(options?: IOptions): null | string;
-  getErrors(options?: IOptions): string[];
-  isValid(silent?: boolean): boolean;
-  lock(): void;
-  toJSON(): Record<string, any>;
-  toObject(): Record<string, any>;
-  toString(): string;
+  public getError(options?: IOptions): null | string;
+  public getErrors(options?: IOptions): string[];
+  public isValid(silent?: boolean): boolean;
+  public lock(): void;
+  public toJSON(): Record<string, any>;
+  public toObject(): Record<string, any>;
+  public toString(): string;
   protected assignAll(
     attributes?: Record<string, any> | Readonly<Record<string, any>>,
     includeKeys?: string[] | ReadonlyArray<string>,
