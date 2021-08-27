@@ -21,6 +21,7 @@ export declare abstract class FillableDto {
   public static fromPlain<Type extends typeof FillableDto>(
     this: Type,
     plain: Record<string, any> | Readonly<Record<string, any>>,
+    // @ts-ignore
   ): InstanceType<Type>;
   public constructor(
     attributes?: Record<string, any> | Readonly<Record<string, any>>,
