@@ -1,6 +1,155 @@
 # Class Fillable DTO
 
-Class Fillable DTO with validation functionality.
+Class Fillable DTO with validation functionality. 🟩 NodeJS only.
+
+## Example
+
+### Minimal implementation
+
+```typescript
+class MyCoolDto extends FillableDto {
+  public shouldDisplayMessage: boolean;
+}
+```
+
+### Strips unnecessary properties
+
+```typescript
+const INCLUDE_KEYS: ReadonlyArray<keyof IMyCoolDto> = [
+  'shouldDisplayMessage',
+] as const;
+
+class MyCoolDto extends FillableDto implements IMyCoolDto {
+  public readonly shouldDisplayMessage: boolean;
+
+  public constructor(attributes: Partial<IMyCoolDto>) {
+    super(attributes, INCLUDE_KEYS);
+  }
+}
+
+const myCoolDto = new MyCoolDto({ shouldDisplayMessage: false, thisPropertyWillBeStripped: true });
+```
+
+### Default values
+
+```typescript
+const DEFAULT_VALUES: Readonly<IMyCoolDto> = {
+  shouldDisplayMessage: false,
+} as const;
+
+class MyCoolDto extends FillableDto implements IMyCoolDto {
+  public readonly shouldDisplayMessage: boolean;
+
+  public constructor(attributes: Partial<IMyCoolDto>) {
+    super(attributes, undefined, DEFAULT_VALUES);
+  }
+}
+```
+
+<span style="color:red;font-weight:bolder">DO NOT SET DEFAULT VALUES IN CLASS PROPERTIES!!!</span>
+
+**Attributes** argument passed to the constructor will be overwritten with a class property default value.
+
+```typescript
+const DEFAULT_VALUES: Readonly<IMyCoolDto> = {
+  shouldDisplayMessage: false,
+} as const;
+
+class MyCoolDto extends FillableDto implements IMyCoolDto {
+  public readonly isActive: boolean = false; // 🛑✋⚠️ No!!!
+  public readonly shouldDisplayMessage: boolean;
+
+  public constructor(attributes: Partial<IMyCoolDto>) {
+    super(attributes, undefined, DEFAULT_VALUES);
+  }
+}
+const myCoolDto = new MyCoolDto({ isActive: true, shouldDisplayMessage: false });
+// `false` as in class property default declaration
+console.log(myCoolDto.isActive);
+```
+
+### Fillable DTO Enterprise Edition
+
+```typescript
+interface IMyCoolDto {
+  shouldDisplayMessage: boolean;
+}
+
+const INCLUDE_KEYS: ReadonlyArray<keyof IMyCoolDto> = [
+  'shouldDisplayMessage',
+] as const;
+
+const DEFAULT_VALUES: Readonly<IMyCoolDto> = {
+  shouldDisplayMessage: false,
+} as const;
+
+class MyCoolDto extends FillableDto implements IMyCoolDto {
+  public readonly shouldDisplayMessage: boolean;
+
+  public constructor(attributes: Partial<IMyCoolDto>) {
+    super(attributes, INCLUDE_KEYS, DEFAULT_VALUES);
+  }
+}
+```
+
+## Methods
+
+#### Declaration
+
+```typescript
+import { IsBoolean } from 'class-validator';
+
+class MyCoolDto extends FillableDto implements IMyCoolDto {
+  @IsBoolean()
+  public readonly shouldDisplayMessage: boolean;
+
+  public constructor(attributes: Partial<IMyCoolDto>) {
+    super(attributes, INCLUDE_KEYS, DEFAULT_VALUES);
+  }
+}
+```
+
+#### Initialization
+
+```typescript
+const attributes = { shouldDisplayMessage: true };
+const includeKeys = ["isActive", "shouldDisplayMessage"];
+const defaults = { isActive: true };
+
+const myCoolDto = new MyCoolDto(attributes, includeKeys, defaults);
+myCoolDto.assign(attributes, includeKeys, defaults); // re-assing everithing
+```
+
+#### Factory Methods
+
+```typescript
+const myCoolDtoFromJSON = MyCoolDto.fromJSON(`{"shouldDisplayMessage":true}`);
+
+const myCoolDtoFromObject = MyCoolDto.fromPlain({ shouldDisplayMessage: true });
+```
+
+#### Validation
+
+```typescript
+const isValid = myCoolDto.isValid(true); // silent
+myCoolDto.isValid(false); // throws error
+const error: null | string = myCoolDto.getError();
+const errors: string[] = myCoolDto.getErrors();
+```
+
+#### Serialization
+
+```typescript
+myCoolDto.toJSON(); // creates plain object clone
+myCoolDto.toObject(); // creates plain object clone
+myCoolDto.toString(); // object packed in JSON string
+```
+
+#### Immutability
+
+```typescript
+myCoolDto.lock(); // prevents further modifications
+```
 
 ## See also
 

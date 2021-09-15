@@ -10,14 +10,14 @@ import { textCaseCapitalize } from "@corefunc/corefunc/text/case/capitalize";
 
 import { cloneMarshalling } from "@corefunc/v8/clone/clone-marshalling";
 
-export interface IOptions {
+export interface IFillableDtoOptions {
   class: boolean;
   property: boolean;
   value: boolean;
   prettify: boolean;
 }
 
-const OPTIONS_DEFAULT: IOptions = {
+export const FILLABLE_DTO_OPTIONS_DEFAULT: IFillableDtoOptions = {
   class: false,
   prettify: true,
   property: false,
@@ -62,14 +62,14 @@ export abstract class FillableDto {
     this.assignAll(attributes, includeKeys, defaultValues);
     return this;
   }
-  public getError(options?: IOptions): null | string {
+  public getError(options?: IFillableDtoOptions): null | string {
     const errors = this.getErrors(options);
     if (errors.length === 0) {
       return null;
     }
     return errors.join(" ").trim();
   }
-  public getErrors(options?: IOptions): string[] {
+  public getErrors(options?: IFillableDtoOptions): string[] {
     const opts = this.buildOptions(options);
     const validationErrors = validateSync(this, {
       validationError: { target: false },
@@ -241,12 +241,12 @@ export abstract class FillableDto {
     }
     return arraySortStrings(keys);
   }
-  protected buildOptions(options?: any): IOptions {
+  protected buildOptions(options?: any): IFillableDtoOptions {
     if (!options) {
-      return OPTIONS_DEFAULT;
+      return FILLABLE_DTO_OPTIONS_DEFAULT;
     }
     if (!isObject(options)) {
-      return OPTIONS_DEFAULT;
+      return FILLABLE_DTO_OPTIONS_DEFAULT;
     }
     return {
       class:
@@ -254,25 +254,25 @@ export abstract class FillableDto {
         "class" in options && isBoolean(options["class"])
           ? // @ts-ignore
             options["class"]
-          : OPTIONS_DEFAULT.class,
+          : FILLABLE_DTO_OPTIONS_DEFAULT.class,
       prettify:
         // @ts-ignore
         "prettify" in options && isBoolean(options["prettify"])
           ? // @ts-ignore
             options["prettify"]
-          : OPTIONS_DEFAULT.prettify,
+          : FILLABLE_DTO_OPTIONS_DEFAULT.prettify,
       property:
         // @ts-ignore
         "property" in options && isBoolean(options["property"])
           ? // @ts-ignore
             options["property"]
-          : OPTIONS_DEFAULT.property,
+          : FILLABLE_DTO_OPTIONS_DEFAULT.property,
       value:
         // @ts-ignore
         "value" in options && isBoolean(options["value"])
           ? // @ts-ignore
             options["value"]
-          : OPTIONS_DEFAULT.value,
+          : FILLABLE_DTO_OPTIONS_DEFAULT.value,
     };
   }
 }

@@ -1,9 +1,10 @@
-export interface IOptions {
+export interface IFillableDtoOptions {
   class: boolean;
   property: boolean;
   value: boolean;
   prettify: boolean;
 }
+export declare const FILLABLE_DTO_OPTIONS_DEFAULT: IFillableDtoOptions;
 /**
  * @summary
  * Classes extended from `FillableDto` shouldn't have default values for class members.
@@ -16,30 +17,30 @@ export interface IOptions {
  */
 export declare abstract class FillableDto {
   // @ts-ignore
-  public static fromJSON<Type extends typeof FillableDto>(this: Type, json: string): InstanceType<Type>;
+  static fromJSON<Type extends typeof FillableDto>(this: Type, json: string): InstanceType<Type>;
   // @ts-ignore
-  public static fromPlain<Type extends typeof FillableDto>(
+  static fromPlain<Type extends typeof FillableDto>(
     this: Type,
     plain: Record<string, any> | Readonly<Record<string, any>>,
     // @ts-ignore
   ): InstanceType<Type>;
-  public constructor(
+  constructor(
     attributes?: Record<string, any> | Readonly<Record<string, any>>,
     includeKeys?: string[] | ReadonlyArray<string>,
     defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
   );
-  public assign(
+  assign(
     attributes?: Record<string, any> | Readonly<Record<string, any>>,
     includeKeys?: string[] | ReadonlyArray<string>,
     defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
   ): this;
-  public getError(options?: IOptions): null | string;
-  public getErrors(options?: IOptions): string[];
-  public isValid(silent?: boolean): boolean;
-  public lock(): void;
-  public toJSON(): Record<string, any>;
-  public toObject(): Record<string, any>;
-  public toString(): string;
+  getError(options?: IFillableDtoOptions): null | string;
+  getErrors(options?: IFillableDtoOptions): string[];
+  isValid(silent?: boolean): boolean;
+  lock(): void;
+  toJSON(): Record<string, any>;
+  toObject(): Record<string, any>;
+  toString(): string;
   protected assignAll(
     attributes?: Record<string, any> | Readonly<Record<string, any>>,
     includeKeys?: string[] | ReadonlyArray<string>,
@@ -60,5 +61,5 @@ export declare abstract class FillableDto {
     attributes?: Record<string, any> | Readonly<Record<string, any>>,
   ): Record<string, any> | undefined;
   protected buildIncludeKeys(includeKeys?: string[] | ReadonlyArray<string>): string[] | undefined;
-  protected buildOptions(options?: any): IOptions;
+  protected buildOptions(options?: any): IFillableDtoOptions;
 }
