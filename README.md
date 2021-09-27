@@ -27,7 +27,10 @@ class MyCoolDto extends FillableDto implements IMyCoolDto {
   }
 }
 
-const myCoolDto = new MyCoolDto({ shouldDisplayMessage: false, thisPropertyWillBeStripped: true });
+const myCoolDto = new MyCoolDto({
+  shouldDisplayMessage: false,
+  thisPropertyWillBeStripped: true,
+});
 ```
 
 ### Default values
@@ -63,9 +66,14 @@ class MyCoolDto extends FillableDto implements IMyCoolDto {
     super(attributes, undefined, DEFAULT_VALUES);
   }
 }
-const myCoolDto = new MyCoolDto({ isActive: true, shouldDisplayMessage: false });
+
+const myCoolDto = new MyCoolDto({
+  isActive: true,
+  shouldDisplayMessage: false,
+});
+
 // `false` as in class property default declaration
-console.log(myCoolDto.isActive);
+console.log(myCoolDto.isActive); // false
 ```
 
 ### Fillable DTO Enterprise Edition
@@ -117,15 +125,19 @@ const includeKeys = ["isActive", "shouldDisplayMessage"];
 const defaults = { isActive: true };
 
 const myCoolDto = new MyCoolDto(attributes, includeKeys, defaults);
-myCoolDto.assign(attributes, includeKeys, defaults); // re-assing everithing
+
+// re-assing everithing
+myCoolDto.assign(attributes, includeKeys, defaults);
 ```
 
 #### Factory Methods
 
 ```typescript
-const myCoolDtoFromJSON = MyCoolDto.fromJSON(`{"shouldDisplayMessage":true}`);
+const myCoolDtoFromJSON = MyCoolDto
+  .fromJSON(`{"shouldDisplayMessage":true}`);
 
-const myCoolDtoFromObject = MyCoolDto.fromPlain({ shouldDisplayMessage: true });
+const myCoolDtoFromObject = MyCoolDto
+  .fromPlain({ shouldDisplayMessage: true });
 ```
 
 #### Validation

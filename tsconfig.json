@@ -9,11 +9,13 @@
     "moduleResolution": "Node",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
+    "removeComments": false,
     "resolveJsonModule": false,
+    "skipLibCheck": true,
+    "sourceMap": false,
     "strict": true,
     "strictPropertyInitialization": false,
     "target": "ES2017",
-    "sourceMap": true
   },
   "exclude": ["node_modules"]
 }
