@@ -1,11 +1,11 @@
 import { classToPlain, plainToClass } from "class-transformer";
-import { isBoolean, isObject, validateSync } from "class-validator";
+import class_validator_1, { isBoolean, isObject, validateSync } from "class-validator";
 import { arraySortStrings } from "@corefunc/corefunc/array/sort/strings";
 import { checkIsObjectLike } from "@corefunc/corefunc/check/is-object-like";
 import { isString } from "@corefunc/corefunc/is/string";
-import { jsonStringifySafe } from "@corefunc/corefunc/json/stringify/safe";
+import safe_1, { jsonStringifySafe } from "@corefunc/corefunc/json/stringify/safe";
 import { objectBasicLock } from "@corefunc/corefunc/object/basic/lock";
-import { textCaseCapitalize } from "@corefunc/corefunc/text/case/capitalize";
+import capitalize_1, { textCaseCapitalize } from "@corefunc/corefunc/text/case/capitalize";
 import { cloneMarshalling } from "@corefunc/v8/clone/clone-marshalling";
 export const FILLABLE_DTO_OPTIONS_DEFAULT = {
   class: false,
@@ -219,4 +219,37 @@ export class FillableDto {
       value: "value" in options && isBoolean(options["value"]) ? options["value"] : FILLABLE_DTO_OPTIONS_DEFAULT.value,
     };
   }
+}
+
+/**
+ * @name validateInstance
+ * @param {object} instance Instance of class with decorators from 'class-validator'.
+ * @returns {string[]} List of errors if exists.
+ * @since 1.2.0
+ */
+function validateInstance(instance) {
+  if (!(0, class_validator_1.isObject)(instance)) {
+    return [`Provided value is not an object. Value is [${(0, safe_1.jsonStringifySafe)(instance)}].`];
+  }
+  const validationErrors = (0, class_validator_1.validateSync)(instance);
+  if (validationErrors.length === 0) {
+    return [];
+  }
+  const constructorName = instance.constructor.name;
+  return validationErrors.map(function errorToSentence(error) {
+    const constraints = {};
+    if ("constraints" in error) {
+      Object.assign(constraints, error.constraints);
+    } else if ("children" in error) {
+      return (error.children || []).map(errorToSentence).join(" ");
+    }
+    const failed = `${Object.values(constraints)
+      .map((text) => `${(0, capitalize_1.textCaseCapitalize)(String(text))}`)
+      .join(". ")}`;
+    const where = `Error in [${constructorName}].`;
+    const property = `Property [${error.property}].`;
+    const value = `Value is [${(0, safe_1.jsonStringifySafe)(error.value)}].`;
+    const message = `Failed: ${failed}.`;
+    return `${where} ${property} ${value} ${message}`;
+  });
 }

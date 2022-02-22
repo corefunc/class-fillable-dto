@@ -12,7 +12,7 @@
   "dependencies": {
     "@corefunc/corefunc": "0.3.*",
     "@corefunc/v8": "0.2.*",
-    "class-transformer": "0.4.*",
+    "class-transformer": "0.5.*",
     "class-validator": "0.13.*"
   },
   "description": "Fillable DTO with validation",
@@ -51,5 +51,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "types": "index.d.ts",
-  "version": "1.1.0"
+  "version": "1.2.0"
 }

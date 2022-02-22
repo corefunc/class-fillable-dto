@@ -1,8 +1,8 @@
 export interface IFillableDtoOptions {
-  class: boolean;
-  property: boolean;
-  value: boolean;
-  prettify: boolean;
+    class: boolean;
+    property: boolean;
+    value: boolean;
+    prettify: boolean;
 }
 export declare const FILLABLE_DTO_OPTIONS_DEFAULT: IFillableDtoOptions;
 /**
@@ -16,50 +16,29 @@ export declare const FILLABLE_DTO_OPTIONS_DEFAULT: IFillableDtoOptions;
  * ```
  */
 export declare abstract class FillableDto {
-  // @ts-ignore
-  static fromJSON<Type extends typeof FillableDto>(this: Type, json: string): InstanceType<Type>;
-  // @ts-ignore
-  static fromPlain<Type extends typeof FillableDto>(
-    this: Type,
-    plain: Record<string, any> | Readonly<Record<string, any>>,
-    // @ts-ignore
-  ): InstanceType<Type>;
-  constructor(
-    attributes?: Record<string, any> | Readonly<Record<string, any>>,
-    includeKeys?: string[] | ReadonlyArray<string>,
-    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
-  );
-  assign(
-    attributes?: Record<string, any> | Readonly<Record<string, any>>,
-    includeKeys?: string[] | ReadonlyArray<string>,
-    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
-  ): this;
-  getError(options?: IFillableDtoOptions): null | string;
-  getErrors(options?: IFillableDtoOptions): string[];
-  isValid(silent?: boolean): boolean;
-  lock(): void;
-  toJSON(): Record<string, any>;
-  toObject(): Record<string, any>;
-  toString(): string;
-  protected assignAll(
-    attributes?: Record<string, any> | Readonly<Record<string, any>>,
-    includeKeys?: string[] | ReadonlyArray<string>,
-    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
-  ): void;
-  protected assignAttributes(attributes?: Record<string, any>, includeKeys?: string[] | ReadonlyArray<string>): this;
-  protected assignDefaults(
-    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
-    includeKeys?: string[] | ReadonlyArray<string>,
-  ): this;
-  protected assignDefaultProperty(
-    key: string,
-    value: any,
-    skipIfKeyNotInObject?: boolean,
-    setOnlyIfUndefined?: boolean,
-  ): this;
-  protected buildAssignAttributes(
-    attributes?: Record<string, any> | Readonly<Record<string, any>>,
-  ): Record<string, any> | undefined;
-  protected buildIncludeKeys(includeKeys?: string[] | ReadonlyArray<string>): string[] | undefined;
-  protected buildOptions(options?: any): IFillableDtoOptions;
+    static fromJSON<Type extends typeof FillableDto>(this: Type, json: string): InstanceType<Type>;
+    static fromPlain<Type extends typeof FillableDto>(this: Type, plain: Record<string, any> | Readonly<Record<string, any>>): InstanceType<Type>;
+    constructor(attributes?: Record<string, any> | Readonly<Record<string, any>>, includeKeys?: string[] | ReadonlyArray<string>, defaultValues?: Record<string, any> | Readonly<Record<string, any>>);
+    assign(attributes?: Record<string, any> | Readonly<Record<string, any>>, includeKeys?: string[] | ReadonlyArray<string>, defaultValues?: Record<string, any> | Readonly<Record<string, any>>): this;
+    getError(options?: IFillableDtoOptions): null | string;
+    getErrors(options?: IFillableDtoOptions): string[];
+    isValid(silent?: boolean): boolean;
+    lock(): void;
+    toJSON(): Record<string, any>;
+    toObject(): Record<string, any>;
+    toString(): string;
+    protected assignAll(attributes?: Record<string, any> | Readonly<Record<string, any>>, includeKeys?: string[] | ReadonlyArray<string>, defaultValues?: Record<string, any> | Readonly<Record<string, any>>): void;
+    protected assignAttributes(attributes?: Record<string, any>, includeKeys?: string[] | ReadonlyArray<string>): this;
+    protected assignDefaults(defaultValues?: Record<string, any> | Readonly<Record<string, any>>, includeKeys?: string[] | ReadonlyArray<string>): this;
+    protected assignDefaultProperty(key: string, value: any, skipIfKeyNotInObject?: boolean, setOnlyIfUndefined?: boolean): this;
+    protected buildAssignAttributes(attributes?: Record<string, any> | Readonly<Record<string, any>>): Record<string, any> | undefined;
+    protected buildIncludeKeys(includeKeys?: string[] | ReadonlyArray<string>): string[] | undefined;
+    protected buildOptions(options?: any): IFillableDtoOptions;
 }
+/**
+ * @name validateInstance
+ * @param {object} instance Instance of class with decorators from 'class-validator'.
+ * @returns {string[]} List of errors if exists.
+ * @since 1.2.0
+ */
+export declare function validateInstance<T extends object>(instance: T): string[];

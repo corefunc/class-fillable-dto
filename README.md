@@ -163,6 +163,20 @@ myCoolDto.toString(); // object packed in JSON string
 myCoolDto.lock(); // prevents further modifications
 ```
 
+## Utilities
+
+#### validateInstance
+
+```typescript
+import { validateInstance } from '@corefunc/class-fillable-dto';
+
+// Empty array if there is no errors.
+validateInstance(new ClassName());
+
+// ['Provided value is not an object. Value is [null].']
+validateInstance(null);
+```
+
 ## See also
 
 [💾 My other projects](https://r37r0m0d3l.icu/open_source_map)

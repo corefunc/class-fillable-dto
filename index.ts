@@ -276,3 +276,36 @@ export abstract class FillableDto {
     };
   }
 }
+
+/**
+ * @name validateInstance
+ * @param {object} instance Instance of class with decorators from 'class-validator'.
+ * @returns {string[]} List of errors if exists.
+ * @since 1.2.0
+ */
+export function validateInstance<T extends object>(instance: T): string[] {
+  if (!isObject(instance)) {
+    return [`Provided value is not an object. Value is [${jsonStringifySafe(instance)}].`];
+  }
+  const validationErrors = validateSync(instance);
+  if (validationErrors.length === 0) {
+    return [];
+  }
+  const constructorName = instance.constructor.name;
+  return validationErrors.map(function errorToSentence(error): string {
+    const constraints = {};
+    if ("constraints" in error) {
+      Object.assign(constraints, error.constraints);
+    } else if ("children" in error) {
+      return (error.children || []).map(errorToSentence).join(" ");
+    }
+    const failed = `${Object.values(constraints)
+      .map((text) => `${textCaseCapitalize(String(text))}`)
+      .join(". ")}`;
+    const where = `Error in [${constructorName}].`;
+    const property = `Property [${error.property}].`;
+    const value = `Value is [${jsonStringifySafe(error.value)}].`;
+    const message = `Failed: ${failed}.`;
+    return `${where} ${property} ${value} ${message}`;
+  });
+}
