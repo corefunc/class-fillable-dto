@@ -114,7 +114,7 @@ export abstract class FillableDto {
 
   public static fromPlainObject<Type extends typeof FillableDto>(
     this: Type,
-    plain: Record<string, unknown> | Readonly<Record<string, unknown>>,
+    plain: Record<string, any> | Readonly<Record<string, any>>,
   ): InstanceType<Type> {
     return plainToClass(this as unknown as ClassConstructor<Type>, plain) as InstanceType<Type>;
   }
@@ -128,7 +128,7 @@ export abstract class FillableDto {
    * @throws {Error}
    * @since 1.2.1
    */
-  public static fromBinaryString<ObjectType extends Record<string, unknown> | typeof FillableDto>(
+  public static fromBinaryString<ObjectType extends Record<string, any> | typeof FillableDto>(
     binaryString: string,
     toPrototype?: ObjectType,
   ): ObjectType {
@@ -140,9 +140,9 @@ export abstract class FillableDto {
   //#region Basic
 
   public constructor(
-    attributes?: Record<string, unknown> | Readonly<Record<string, unknown>>,
+    attributes?: Record<string, any> | Readonly<Record<string, any>>,
     includeKeys?: string[] | ReadonlyArray<string>,
-    defaultValues?: Record<string, unknown> | Readonly<Record<string, unknown>>,
+    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
   ) {
     this.assignAll(attributes, includeKeys, defaultValues);
   }
@@ -183,10 +183,10 @@ export abstract class FillableDto {
 
   /**
    * @name toJsonObject
-   * @returns {Record<string, unknown>>}
+   * @returns {Record<string, any>>}
    * @since 1.2.1
    */
-  public toJsonObject(): Record<string, unknown> {
+  public toJsonObject(): Record<string, any> {
     return JSON.parse(this.toJSON());
   }
 
@@ -211,10 +211,10 @@ export abstract class FillableDto {
 
   /**
    * @name toPlainObject
-   * @returns {Record<string, unknown>}
+   * @returns {Record<string, any>}
    * @since 1.2.1
    */
-  public toPlainObject(): Record<string, unknown> {
+  public toPlainObject(): Record<string, any> {
     return instanceToPlain(cloneMarshalling(this));
   }
 
@@ -223,27 +223,27 @@ export abstract class FillableDto {
   //#region Assign
 
   public assign(
-    attributes?: Record<string, unknown> | Readonly<Record<string, unknown>>,
+    attributes?: Record<string, any> | Readonly<Record<string, any>>,
     includeKeys?: string[] | ReadonlyArray<string>,
-    defaultValues?: Record<string, unknown> | Readonly<Record<string, unknown>>,
+    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
   ): this {
     this.assignAll(attributes, includeKeys, defaultValues);
     return this;
   }
 
   protected assignAll(
-    attributes?: Record<string, unknown> | Readonly<Record<string, unknown>>,
+    attributes?: Record<string, any> | Readonly<Record<string, any>>,
     includeKeys?: string[] | ReadonlyArray<string>,
-    defaultValues?: Record<string, unknown> | Readonly<Record<string, unknown>>,
+    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
   ): this {
-    const assignAttributes: Record<string, unknown> | undefined = this.buildAssignAttributes(attributes);
+    const assignAttributes: Record<string, any> | undefined = this.buildAssignAttributes(attributes);
     const includeKeysList = this.buildIncludeKeys(includeKeys);
     this.assignAttributes(assignAttributes, includeKeysList);
     this.assignDefaults(defaultValues, includeKeysList);
     return this;
   }
 
-  protected assignAttributes(attributes?: Record<string, unknown>, includeKeys?: string[] | ReadonlyArray<string>): this {
+  protected assignAttributes(attributes?: Record<string, any>, includeKeys?: string[] | ReadonlyArray<string>): this {
     if (!attributes) {
       return this;
     }
@@ -264,7 +264,7 @@ export abstract class FillableDto {
   }
 
   protected assignDefaults(
-    defaultValues?: Record<string, unknown> | Readonly<Record<string, unknown>>,
+    defaultValues?: Record<string, any> | Readonly<Record<string, any>>,
     includeKeys?: string[] | ReadonlyArray<string>,
   ): this {
     if (defaultValues && checkIsObjectLike(defaultValues)) {
@@ -394,9 +394,9 @@ export abstract class FillableDto {
   }
 
   protected buildAssignAttributes(
-    attributes?: Record<string, unknown> | Readonly<Record<string, unknown>>,
-  ): Record<string, unknown> | undefined {
-    let assignAttributes: Record<string, unknown> | undefined;
+    attributes?: Record<string, any> | Readonly<Record<string, any>>,
+  ): Record<string, any> | undefined {
+    let assignAttributes: Record<string, any> | undefined;
     if (checkIsObjectLike(attributes)) {
       assignAttributes = instanceToPlain(cloneMarshalling(attributes));
     } else {

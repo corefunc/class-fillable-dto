@@ -150,7 +150,7 @@ class FillableDto {
     }
     /**
      * @name toJsonObject
-     * @returns {Record<string, unknown>>}
+     * @returns {Record<string, any>>}
      * @since 1.2.1
      */
     toJsonObject() {
@@ -175,7 +175,7 @@ class FillableDto {
     }
     /**
      * @name toPlainObject
-     * @returns {Record<string, unknown>}
+     * @returns {Record<string, any>}
      * @since 1.2.1
      */
     toPlainObject() {

@@ -1,15 +1,15 @@
 // index.ts
-import { arraySortStrings } from "@corefunc/corefunc/array/sort/strings.mjs";
-import { checkIsObjectLike } from "@corefunc/corefunc/check/is-object-like.mjs";
-import { cloneMarshalling } from "@corefunc/v8/clone/clone-marshalling.mjs";
-import { deserializeFromString } from "@corefunc/v8/deserialize/from-string.mjs";
+import { arraySortStrings } from "@corefunc/corefunc/array/sort/strings";
+import { checkIsObjectLike } from "@corefunc/corefunc/check/is-object-like";
+import { cloneMarshalling } from "@corefunc/v8/clone/clone-marshalling";
+import { deserializeFromString } from "@corefunc/v8/deserialize/from-string";
 import { instanceToPlain, plainToClass } from "class-transformer";
 import { isBoolean, isObject, validateSync } from "class-validator";
-import { isString } from "@corefunc/corefunc/is/string.mjs";
-import { jsonStringifySafe } from "@corefunc/corefunc/json/stringify/safe.mjs";
-import { objectBasicLock } from "@corefunc/corefunc/object/basic/lock.mjs";
-import { serializeToString } from "@corefunc/v8/serialize/to-string.mjs";
-import { textCaseCapitalize } from "@corefunc/corefunc/text/case/capitalize.mjs";
+import { isString } from "@corefunc/corefunc/is/string";
+import { jsonStringifySafe } from "@corefunc/corefunc/json/stringify/safe";
+import { objectBasicLock } from "@corefunc/corefunc/object/basic/lock";
+import { serializeToString } from "@corefunc/v8/serialize/to-string";
+import { textCaseCapitalize } from "@corefunc/corefunc/text/case/capitalize";
 var FILLABLE_DTO_OPTIONS_DEFAULT = {
   class: false,
   prettify: true,

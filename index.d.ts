@@ -48,7 +48,7 @@ export declare function validateInstance<T extends object>(instance: T): string[
  */
 export declare abstract class FillableDto {
     static fromJSON<Type extends typeof FillableDto>(this: Type, json: string): InstanceType<Type>;
-    static fromPlainObject<Type extends typeof FillableDto>(this: Type, plain: Record<string, unknown> | Readonly<Record<string, unknown>>): InstanceType<Type>;
+    static fromPlainObject<Type extends typeof FillableDto>(this: Type, plain: Record<string, any> | Readonly<Record<string, any>>): InstanceType<Type>;
     /**
      * @name fromBinaryString
      * @description Deserialize DTO to plain object from binary string.
@@ -58,8 +58,8 @@ export declare abstract class FillableDto {
      * @throws {Error}
      * @since 1.2.1
      */
-    static fromBinaryString<ObjectType extends Record<string, unknown> | typeof FillableDto>(binaryString: string, toPrototype?: ObjectType): ObjectType;
-    constructor(attributes?: Record<string, unknown> | Readonly<Record<string, unknown>>, includeKeys?: string[] | ReadonlyArray<string>, defaultValues?: Record<string, unknown> | Readonly<Record<string, unknown>>);
+    static fromBinaryString<ObjectType extends Record<string, any> | typeof FillableDto>(binaryString: string, toPrototype?: ObjectType): ObjectType;
+    constructor(attributes?: Record<string, any> | Readonly<Record<string, any>>, includeKeys?: string[] | ReadonlyArray<string>, defaultValues?: Record<string, any> | Readonly<Record<string, any>>);
     /**
      * @name clone
      * @see FillableDto.toObject()
@@ -83,10 +83,10 @@ export declare abstract class FillableDto {
     toJson(): string;
     /**
      * @name toJsonObject
-     * @returns {Record<string, unknown>>}
+     * @returns {Record<string, any>>}
      * @since 1.2.1
      */
-    toJsonObject(): Record<string, unknown>;
+    toJsonObject(): Record<string, any>;
     /**
      * @name toObject
      * @returns {FillableDto}
@@ -102,19 +102,19 @@ export declare abstract class FillableDto {
     toString(): string;
     /**
      * @name toPlainObject
-     * @returns {Record<string, unknown>}
+     * @returns {Record<string, any>}
      * @since 1.2.1
      */
-    toPlainObject(): Record<string, unknown>;
-    assign(attributes?: Record<string, unknown> | Readonly<Record<string, unknown>>, includeKeys?: string[] | ReadonlyArray<string>, defaultValues?: Record<string, unknown> | Readonly<Record<string, unknown>>): this;
-    protected assignAll(attributes?: Record<string, unknown> | Readonly<Record<string, unknown>>, includeKeys?: string[] | ReadonlyArray<string>, defaultValues?: Record<string, unknown> | Readonly<Record<string, unknown>>): this;
-    protected assignAttributes(attributes?: Record<string, unknown>, includeKeys?: string[] | ReadonlyArray<string>): this;
-    protected assignDefaults(defaultValues?: Record<string, unknown> | Readonly<Record<string, unknown>>, includeKeys?: string[] | ReadonlyArray<string>): this;
+    toPlainObject(): Record<string, any>;
+    assign(attributes?: Record<string, any> | Readonly<Record<string, any>>, includeKeys?: string[] | ReadonlyArray<string>, defaultValues?: Record<string, any> | Readonly<Record<string, any>>): this;
+    protected assignAll(attributes?: Record<string, any> | Readonly<Record<string, any>>, includeKeys?: string[] | ReadonlyArray<string>, defaultValues?: Record<string, any> | Readonly<Record<string, any>>): this;
+    protected assignAttributes(attributes?: Record<string, any>, includeKeys?: string[] | ReadonlyArray<string>): this;
+    protected assignDefaults(defaultValues?: Record<string, any> | Readonly<Record<string, any>>, includeKeys?: string[] | ReadonlyArray<string>): this;
     isValid(silent?: boolean): boolean;
     getError(options?: FillableDtoOptionsInterface): null | string;
     getErrors(options?: FillableDtoOptionsInterface): string[];
     protected assignDefaultProperty(key: string, value: any, skipIfKeyNotInObject?: boolean, setOnlyIfUndefined?: boolean): this;
-    protected buildAssignAttributes(attributes?: Record<string, unknown> | Readonly<Record<string, unknown>>): Record<string, unknown> | undefined;
+    protected buildAssignAttributes(attributes?: Record<string, any> | Readonly<Record<string, any>>): Record<string, any> | undefined;
     protected buildIncludeKeys(includeKeys?: string[] | ReadonlyArray<string>): string[] | undefined;
     protected buildOptions(options?: any): FillableDtoOptionsInterface;
 }
