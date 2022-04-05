@@ -17,10 +17,12 @@
   },
   "description": "Fillable DTO with validation",
   "devDependencies": {
-    "prettier": "2.4.*"
+    "@types/node": "17.0.23",
+    "esbuild": "0.14.30",
+    "prettier": "2.6.2"
   },
   "engines": {
-    "node": ">=12.0.0",
+    "node": ">=12.20.0",
     "npm": ">=6.0.0"
   },
   "engineStrict": true,
@@ -47,9 +49,14 @@
     "url": "git+https://github.com/corefunc/class-fillable-dto.git"
   },
   "scripts": {
+    "build": "npm run build:prod",
+    "build:test": "node ./build.cjs -- --minify=false --sourcemap=false",
+    "build:dev": "node ./build.cjs -- --minify=false --sourcemap=true",
+    "build:prod": "node ./build.cjs -- --minify=true --sourcemap=true",
     "package:upgrade": "npx npm-check --update",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "update": "npx npm-check --update"
   },
   "types": "index.d.ts",
-  "version": "1.2.0"
+  "version": "1.2.1"
 }
