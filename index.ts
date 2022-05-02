@@ -193,9 +193,9 @@ export abstract class FillableDto {
   /**
    * @name toObject
    * @returns {FillableDto}
-   * @since 1.2.1
+   * @since 1.2.6
    */
-  public toObject(): FillableDto {
+  public toObject(): Record<string, any> {
     return cloneMarshalling(this);
   }
 
@@ -376,14 +376,14 @@ export abstract class FillableDto {
     });
   }
 
-  public throwErrorOnInvalid(startWith = "", endWith = "", options?: FillableDtoOptionsInterface) {
+  public throwErrorOnInvalid(startWith = "", endWith = "", options?: FillableDtoOptionsInterface): void {
     const error = this.getError({ ...FILLABLE_DTO_OPTIONS_DEFAULT, ...options });
     if (error) {
       throw new Error(`${startWith}${error}${endWith}`);
     }
   }
 
-  public throwErrorOnInvalidValue(startWith = "", endWith = "", options?: FillableDtoOptionsInterface) {
+  public throwErrorOnInvalidValue(startWith = "", endWith = "", options?: FillableDtoOptionsInterface): void {
     const error = this.getError({ class: false, prettify: true, property: false, value: true, ...options });
     if (error) {
       throw new Error(`${startWith}${error}${endWith}`);

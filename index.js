@@ -159,7 +159,7 @@ class FillableDto {
     /**
      * @name toObject
      * @returns {FillableDto}
-     * @since 1.2.1
+     * @since 1.2.6
      */
     toObject() {
         return (0, clone_marshalling_1.cloneMarshalling)(this);

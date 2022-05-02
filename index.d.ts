@@ -90,7 +90,7 @@ export declare abstract class FillableDto {
     /**
      * @name toObject
      * @returns {FillableDto}
-     * @since 1.2.1
+     * @since 1.2.6
      */
     toObject(): Record<string, any>;
     /**
