@@ -63,10 +63,10 @@ export declare abstract class FillableDto {
     /**
      * @name clone
      * @see FillableDto.toObject()
-     * @returns {FillableDto}
-     * @since 1.2.1
+     * @returns {Record<string, any>}
+     * @since 1.2.4
      */
-    clone(): FillableDto;
+    clone(): Record<string, any>;
     /**
      * @name lock
      * @description Lock, freeze and seal object.

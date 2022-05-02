@@ -150,10 +150,10 @@ export abstract class FillableDto {
   /**
    * @name clone
    * @see FillableDto.toObject()
-   * @returns {FillableDto}
-   * @since 1.2.1
+   * @returns {Record<string, any>}
+   * @since 1.2.4
    */
-  public clone(): FillableDto {
+  public clone(): Record<string, any> {
     return this.toObject();
   }
 

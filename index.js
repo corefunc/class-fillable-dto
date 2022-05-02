@@ -121,8 +121,8 @@ class FillableDto {
     /**
      * @name clone
      * @see FillableDto.toObject()
-     * @returns {FillableDto}
-     * @since 1.2.1
+     * @returns {Record<string, any>}
+     * @since 1.2.4
      */
     clone() {
         return this.toObject();
