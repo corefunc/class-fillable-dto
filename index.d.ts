@@ -113,6 +113,8 @@ export declare abstract class FillableDto {
     isValid(silent?: boolean): boolean;
     getError(options?: FillableDtoOptionsInterface): null | string;
     getErrors(options?: FillableDtoOptionsInterface): string[];
+    throwErrorOnInvalid(startWith?: string, endWith?: string, options?: FillableDtoOptionsInterface): void;
+    throwErrorOnInvalidValue(startWith?: string, endWith?: string, options?: FillableDtoOptionsInterface): void;
     protected assignDefaultProperty(key: string, value: any, skipIfKeyNotInObject?: boolean, setOnlyIfUndefined?: boolean): this;
     protected buildAssignAttributes(attributes?: Record<string, any> | Readonly<Record<string, any>>): Record<string, any> | undefined;
     protected buildIncludeKeys(includeKeys?: string[] | ReadonlyArray<string>): string[] | undefined;

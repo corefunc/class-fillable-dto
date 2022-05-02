@@ -302,7 +302,14 @@ class FillableDto {
             let message;
             if (opts.prettify) {
                 const failedPretty = Object.values(constraints)
-                    .map((text) => String(text).replace(error.property, `[${error.property}]`).trim())
+                    .map((text) => {
+                    if (opts.property) {
+                        return String(text).replace(error.property, `[${error.property}]`).trim();
+                    }
+                    else {
+                        return String(text).replace(error.property, "").trim();
+                    }
+                })
                     .map((text) => (0, capitalize_1.textCaseCapitalize)(String(text)))
                     .map((text) => String(text).trim())
                     .join(". ");
@@ -315,6 +322,18 @@ class FillableDto {
             }
             return `${where} ${property} ${value} ${message}`.trim();
         });
+    }
+    throwErrorOnInvalid(startWith = "", endWith = "", options) {
+        const error = this.getError(Object.assign(Object.assign({}, exports.FILLABLE_DTO_OPTIONS_DEFAULT), options));
+        if (error) {
+            throw new Error(`${startWith}${error}${endWith}`);
+        }
+    }
+    throwErrorOnInvalidValue(startWith = "", endWith = "", options) {
+        const error = this.getError(Object.assign({ class: false, prettify: true, property: false, value: true }, options));
+        if (error) {
+            throw new Error(`${startWith}${error}${endWith}`);
+        }
     }
     //#endregion
     //#region Protected

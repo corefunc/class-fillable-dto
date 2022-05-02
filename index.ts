@@ -356,7 +356,13 @@ export abstract class FillableDto {
       let message;
       if (opts.prettify) {
         const failedPretty = Object.values(constraints)
-          .map((text) => String(text).replace(error.property, `[${error.property}]`).trim())
+          .map((text) => {
+            if (opts.property) {
+              return String(text).replace(error.property, `[${error.property}]`).trim();
+            } else {
+              return String(text).replace(error.property, "").trim();
+            }
+          })
           .map((text) => textCaseCapitalize(String(text)))
           .map((text) => String(text).trim())
           .join(". ");
@@ -368,6 +374,20 @@ export abstract class FillableDto {
       }
       return `${where} ${property} ${value} ${message}`.trim();
     });
+  }
+
+  public throwErrorOnInvalid(startWith = "", endWith = "", options?: FillableDtoOptionsInterface) {
+    const error = this.getError({ ...FILLABLE_DTO_OPTIONS_DEFAULT, ...options });
+    if (error) {
+      throw new Error(`${startWith}${error}${endWith}`);
+    }
+  }
+
+  public throwErrorOnInvalidValue(startWith = "", endWith = "", options?: FillableDtoOptionsInterface) {
+    const error = this.getError({ class: false, prettify: true, property: false, value: true, ...options });
+    if (error) {
+      throw new Error(`${startWith}${error}${endWith}`);
+    }
   }
 
   //#endregion
@@ -450,6 +470,5 @@ export abstract class FillableDto {
           : FILLABLE_DTO_OPTIONS_DEFAULT.value,
     };
   }
-
   //#endregion
 }
