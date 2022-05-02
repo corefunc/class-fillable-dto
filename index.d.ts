@@ -64,7 +64,7 @@ export declare abstract class FillableDto {
      * @name clone
      * @see FillableDto.toObject()
      * @returns {Record<string, any>}
-     * @since 1.2.4
+     * @since 1.2.5
      */
     clone(): Record<string, any>;
     /**
@@ -92,7 +92,7 @@ export declare abstract class FillableDto {
      * @returns {FillableDto}
      * @since 1.2.1
      */
-    toObject(): FillableDto;
+    toObject(): Record<string, any>;
     /**
      * @name toString
      * @description Serialize DTO to binary string.
