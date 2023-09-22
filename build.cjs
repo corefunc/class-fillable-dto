@@ -158,8 +158,8 @@ Promise.all([
   //
   start(),
   mjs(),
-  // cjs(),
-  // js(),
+  cjs(),
+  js(),
   // dts(),
 ])
   .then(() => {

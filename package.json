@@ -52,12 +52,12 @@
   "scripts": {
     "build": "npm run build:prod",
     "build:test": "node ./build.cjs -- --minify=false --sourcemap=false",
-    "build:dev": "node ./build.cjs -- --minify=false --sourcemap=true",
-    "build:prod": "node ./build.cjs -- --minify=true --sourcemap=true",
+    "build:dev": "node ./build.cjs -- --minify=false --sourcemap=false",
+    "build:prod": "node ./build.cjs -- --minify=false --sourcemap=false",
     "package:upgrade": "npx npm-check --update",
     "test": "echo \"Error: no test specified\" && exit 1",
     "update": "npx npm-check --update"
   },
   "types": "index.d.ts",
-  "version": "1.2.6"
+  "version": "1.2.7"
 }

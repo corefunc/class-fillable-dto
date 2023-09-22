@@ -419,6 +419,13 @@ export abstract class FillableDto {
     let assignAttributes: Record<string, any> | undefined;
     if (checkIsObjectLike(attributes)) {
       assignAttributes = instanceToPlain(cloneMarshalling(attributes));
+      Object.keys(attributes!).forEach((key: string): void => {
+        if (attributes![key] instanceof Date) {
+          const clonedDate = new Date();
+          clonedDate.setTime(attributes![key].getTime());
+          assignAttributes![key] = clonedDate;
+        }
+      });
     } else {
       assignAttributes = undefined;
     }

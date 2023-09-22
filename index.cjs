@@ -1,64 +1,78 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.FillableDto = exports.validateInstance = exports.anyValueToPrintableString = exports.FILLABLE_DTO_OPTIONS_DEFAULT = void 0;
-const strings_1 = require("@corefunc/corefunc/array/sort/strings");
-const is_object_like_1 = require("@corefunc/corefunc/check/is-object-like");
-const clone_marshalling_1 = require("@corefunc/v8/clone/clone-marshalling");
-const from_string_1 = require("@corefunc/v8/deserialize/from-string");
-const class_transformer_1 = require("class-transformer");
-const class_validator_1 = require("class-validator");
-const string_1 = require("@corefunc/corefunc/is/string");
-const safe_1 = require("@corefunc/corefunc/json/stringify/safe");
-const lock_1 = require("@corefunc/corefunc/object/basic/lock");
-const to_string_1 = require("@corefunc/v8/serialize/to-string");
-const capitalize_1 = require("@corefunc/corefunc/text/case/capitalize");
-/**
- * @name FILLABLE_DTO_OPTIONS_DEFAULT
- * @const
- * @property {boolean=} [class=false] Add class name into error description. Default - false.
- * @property {boolean=} [prettify=true] Prettify output. Default - true.
- * @property {boolean=} [property=false] Add property name into error description. Default - false.
- * @property {boolean=} [value=false] Add value into error description. Default - false.
- */
-exports.FILLABLE_DTO_OPTIONS_DEFAULT = {
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// index.ts
+var class_fillable_dto_exports = {};
+__export(class_fillable_dto_exports, {
+  FILLABLE_DTO_OPTIONS_DEFAULT: () => FILLABLE_DTO_OPTIONS_DEFAULT,
+  FillableDto: () => FillableDto,
+  anyValueToPrintableString: () => anyValueToPrintableString,
+  validateInstance: () => validateInstance
+});
+module.exports = __toCommonJS(class_fillable_dto_exports);
+var import_strings = require("@corefunc/corefunc/array/sort/strings");
+var import_is_object_like = require("@corefunc/corefunc/check/is-object-like");
+var import_clone_marshalling = require("@corefunc/v8/clone/clone-marshalling");
+var import_from_string = require("@corefunc/v8/deserialize/from-string");
+var import_class_transformer = require("class-transformer");
+var import_class_validator = require("class-validator");
+var import_string = require("@corefunc/corefunc/is/string");
+var import_safe = require("@corefunc/corefunc/json/stringify/safe");
+var import_lock = require("@corefunc/corefunc/object/basic/lock");
+var import_to_string = require("@corefunc/v8/serialize/to-string");
+var import_capitalize = require("@corefunc/corefunc/text/case/capitalize");
+var FILLABLE_DTO_OPTIONS_DEFAULT = {
   class: false,
   prettify: true,
   property: false,
-  value: false,
+  value: false
 };
-/**
- * @name anyValueToPrintableString
- * @param {unknown} value
- * @returns {string}
- * @since 1.2.1
- */
 function anyValueToPrintableString(value) {
   if (typeof value === "string") {
     return `'${value}'`;
-  }
-  else if (typeof value === "number" || typeof value === "boolean") {
+  } else if (typeof value === "number" || typeof value === "boolean") {
     return String(value);
-  }
-  else if (value === undefined) {
+  } else if (value === void 0) {
     return "undefined";
-  }
-  else if (value === null) {
+  } else if (value === null) {
     return "null";
   }
-  return (0, safe_1.jsonStringifySafe)(value);
+  return (0, import_safe.jsonStringifySafe)(value);
 }
-exports.anyValueToPrintableString = anyValueToPrintableString;
-/**
- * @name validateInstance
- * @param {object} instance Instance of class with decorators from 'class-validator'.
- * @returns {string[]} List of errors if exists.
- * @since 1.2.0
- */
 function validateInstance(instance) {
-  if (!(0, class_validator_1.isObject)(instance)) {
+  if (!(0, import_class_validator.isObject)(instance)) {
     return [`Provided value is not an object. Value is [${anyValueToPrintableString(instance)}].`];
   }
-  const validationErrors = (0, class_validator_1.validateSync)(instance);
+  const validationErrors = (0, import_class_validator.validateSync)(instance);
   if (validationErrors.length === 0) {
     return [];
   }
@@ -67,13 +81,10 @@ function validateInstance(instance) {
     const constraints = {};
     if ("constraints" in error) {
       Object.assign(constraints, error.constraints);
-    }
-    else if ("children" in error) {
+    } else if ("children" in error) {
       return (error.children || []).map(errorToSentence).join(" ");
     }
-    const failed = `${Object.values(constraints)
-      .map((text) => `${(0, capitalize_1.textCaseCapitalize)(String(text))}`)
-      .join(". ")}`;
+    const failed = `${Object.values(constraints).map((text) => `${(0, import_capitalize.textCaseCapitalize)(String(text))}`).join(". ")}`;
     const where = `Error in [${constructorName}].`;
     const property = `Property [${error.property}].`;
     const value = `Value is [${anyValueToPrintableString(error.value)}].`;
@@ -81,108 +92,44 @@ function validateInstance(instance) {
     return `${where} ${property} ${value} ${message}`;
   });
 }
-exports.validateInstance = validateInstance;
-/**
- * @class FillableDto
- * @description
- * Classes extended from `FillableDto` shouldn't have default values for class members.
- * Use constructor instead.
- * @example ```
- * export class ErrorDto extends FillableDto {
- *  public readonly message: string;
- * }
- * ```
- */
-class FillableDto {
-  //#region Static
+var FillableDto = class {
   static fromJSON(json) {
     return this.fromPlainObject(JSON.parse(json));
   }
   static fromPlainObject(plain) {
-    return (0, class_transformer_1.plainToClass)(this, plain);
+    return (0, import_class_transformer.plainToClass)(this, plain);
   }
-  /**
-   * @name fromBinaryString
-   * @description Deserialize DTO to plain object from binary string.
-   * @param {string} binaryString
-   * @param {Object=} toPrototype
-   * @returns {FillableDto}
-   * @throws {Error}
-   * @since 1.2.1
-   */
   static fromBinaryString(binaryString, toPrototype) {
-    return (0, from_string_1.deserializeFromString)(binaryString, toPrototype);
+    return (0, import_from_string.deserializeFromString)(binaryString, toPrototype);
   }
-  //#endregion
-  //#region Basic
   constructor(attributes, includeKeys, defaultValues) {
     this.assignAll(attributes, includeKeys, defaultValues);
   }
-  /**
-   * @name clone
-   * @see FillableDto.toObject()
-   * @returns {FillableDto}
-   * @since 1.2.1
-   */
   clone() {
     return this.toObject();
   }
-  /**
-   * @name lock
-   * @description Lock, freeze and seal object.
-   * @returns {FillableDto}
-   */
   lock() {
-    (0, lock_1.objectBasicLock)(this);
+    (0, import_lock.objectBasicLock)(this);
     return this;
   }
   toJSON() {
-    return (0, safe_1.jsonStringifySafe)(this.toPlainObject());
+    return (0, import_safe.jsonStringifySafe)(this.toPlainObject());
   }
-  /**
-   * @name toJson
-   * @see FillableDto.toJSON()
-   * @returns {string}
-   * @since 1.2.1
-   */
   toJson() {
     return this.toJSON();
   }
-  /**
-   * @name toJsonObject
-   * @returns {Record<string, any>>}
-   * @since 1.2.1
-   */
   toJsonObject() {
     return JSON.parse(this.toJSON());
   }
-  /**
-   * @name toObject
-   * @returns {FillableDto}
-   * @since 1.2.6
-   */
   toObject() {
-    return (0, clone_marshalling_1.cloneMarshalling)(this);
+    return (0, import_clone_marshalling.cloneMarshalling)(this);
   }
-  /**
-   * @name toString
-   * @description Serialize DTO to binary string.
-   * @returns {string}
-   * @since 1.2.1
-   */
   toString() {
-    return (0, to_string_1.serializeToString)(this.toPlainObject());
+    return (0, import_to_string.serializeToString)(this.toPlainObject());
   }
-  /**
-   * @name toPlainObject
-   * @returns {Record<string, any>}
-   * @since 1.2.1
-   */
   toPlainObject() {
-    return (0, class_transformer_1.instanceToPlain)((0, clone_marshalling_1.cloneMarshalling)(this));
+    return (0, import_class_transformer.instanceToPlain)((0, import_clone_marshalling.cloneMarshalling)(this));
   }
-  //#endregion
-  //#region Assign
   assign(attributes, includeKeys, defaultValues) {
     this.assignAll(attributes, includeKeys, defaultValues);
     return this;
@@ -201,29 +148,25 @@ class FillableDto {
     let keys;
     if (includeKeys) {
       keys = includeKeys;
-    }
-    else {
+    } else {
       keys = Object.keys(attributes);
     }
     keys.forEach((key) => {
       if (key in attributes) {
-        // Trigger key setter for object instance
-        // @ts-ignore
-        this[key] = (0, clone_marshalling_1.cloneMarshalling)(attributes[key]);
+        this[key] = (0, import_clone_marshalling.cloneMarshalling)(attributes[key]);
       }
     });
     return this;
   }
   assignDefaults(defaultValues, includeKeys) {
-    if (defaultValues && (0, is_object_like_1.checkIsObjectLike)(defaultValues)) {
+    if (defaultValues && (0, import_is_object_like.checkIsObjectLike)(defaultValues)) {
       if (includeKeys) {
         Object.keys(defaultValues).forEach((key) => {
           if (includeKeys.includes(key)) {
             this.assignDefaultProperty(key, defaultValues[key]);
           }
         });
-      }
-      else {
+      } else {
         Object.keys(defaultValues).forEach((key) => {
           this.assignDefaultProperty(key, defaultValues[key]);
         });
@@ -231,10 +174,8 @@ class FillableDto {
     }
     return this;
   }
-  //#endregion
-  //#region Validation
   isValid(silent = false) {
-    const validationErrors = (0, class_validator_1.validateSync)(this);
+    const validationErrors = (0, import_class_validator.validateSync)(this);
     if (silent) {
       return Boolean(validationErrors.length === 0);
     }
@@ -242,25 +183,20 @@ class FillableDto {
       return true;
     }
     const constructorName = this.constructor.name;
-    const errorText = validationErrors
-      .map(function errorToSentence(error) {
-        const constraints = {};
-        if ("constraints" in error) {
-          Object.assign(constraints, error.constraints);
-        }
-        else if ("children" in error) {
-          return (error.children || []).map(errorToSentence).join(" ");
-        }
-        const failed = `${Object.values(constraints)
-          .map((text) => `${(0, capitalize_1.textCaseCapitalize)(String(text))}`)
-          .join(". ")}`;
-        const where = `Error in [${constructorName}].`;
-        const property = `Property [${error.property}].`;
-        const value = `Value is [${anyValueToPrintableString(error.value)}].`;
-        const message = `Failed: ${failed}.`;
-        return `${where} ${property} ${value} ${message}`;
-      })
-      .join(" ");
+    const errorText = validationErrors.map(function errorToSentence(error) {
+      const constraints = {};
+      if ("constraints" in error) {
+        Object.assign(constraints, error.constraints);
+      } else if ("children" in error) {
+        return (error.children || []).map(errorToSentence).join(" ");
+      }
+      const failed = `${Object.values(constraints).map((text) => `${(0, import_capitalize.textCaseCapitalize)(String(text))}`).join(". ")}`;
+      const where = `Error in [${constructorName}].`;
+      const property = `Property [${error.property}].`;
+      const value = `Value is [${anyValueToPrintableString(error.value)}].`;
+      const message = `Failed: ${failed}.`;
+      return `${where} ${property} ${value} ${message}`;
+    }).join(" ");
     throw new Error(errorText);
   }
   getError(options) {
@@ -272,8 +208,8 @@ class FillableDto {
   }
   getErrors(options) {
     const opts = this.buildOptions(options);
-    const validationErrors = (0, class_validator_1.validateSync)(this, {
-      validationError: { target: false },
+    const validationErrors = (0, import_class_validator.validateSync)(this, {
+      validationError: { target: false }
     });
     if (validationErrors.length === 0) {
       return [];
@@ -283,8 +219,7 @@ class FillableDto {
       const constraints = {};
       if ("constraints" in error) {
         Object.assign(constraints, error.constraints);
-      }
-      else if ("children" in error) {
+      } else if ("children" in error) {
         return (error.children || []).map(errorToSentence).join(" ");
       }
       let where = "";
@@ -301,108 +236,88 @@ class FillableDto {
       }
       let message;
       if (opts.prettify) {
-        const failedPretty = Object.values(constraints)
-          .map((text) => {
-            if (opts.property) {
-              return String(text).replace(error.property, `[${error.property}]`).trim();
-            }
-            else {
-              return String(text).replace(error.property, "").trim();
-            }
-          })
-          .map((text) => (0, capitalize_1.textCaseCapitalize)(String(text)))
-          .map((text) => String(text).trim())
-          .join(". ");
+        const failedPretty = Object.values(constraints).map((text) => {
+          if (opts.property) {
+            return String(text).replace(error.property, `[${error.property}]`).trim();
+          } else {
+            return String(text).replace(error.property, "").trim();
+          }
+        }).map((text) => (0, import_capitalize.textCaseCapitalize)(String(text))).map((text) => String(text).trim()).join(". ");
         message = `${failedPretty}.`;
-      }
-      else {
-        message = Object.values(constraints)
-          .map((text) => String(text).trim())
-          .join(". ");
+      } else {
+        message = Object.values(constraints).map((text) => String(text).trim()).join(". ");
       }
       return `${where} ${property} ${value} ${message}`.trim();
     });
   }
   throwErrorOnInvalid(startWith = "", endWith = "", options) {
-    const error = this.getError(Object.assign(Object.assign({}, exports.FILLABLE_DTO_OPTIONS_DEFAULT), options));
+    const error = this.getError(__spreadValues(__spreadValues({}, FILLABLE_DTO_OPTIONS_DEFAULT), options));
     if (error) {
       throw new Error(`${startWith}${error}${endWith}`);
     }
   }
   throwErrorOnInvalidValue(startWith = "", endWith = "", options) {
-    const error = this.getError(Object.assign({ class: false, prettify: true, property: false, value: true }, options));
+    const error = this.getError(__spreadValues({ class: false, prettify: true, property: false, value: true }, options));
     if (error) {
       throw new Error(`${startWith}${error}${endWith}`);
     }
   }
-  //#endregion
-  //#region Protected
   assignDefaultProperty(key, value, skipIfKeyNotInObject = false, setOnlyIfUndefined = true) {
     const isKeyInObject = key in this;
     if (skipIfKeyNotInObject && !isKeyInObject) {
       return this;
     }
-    // @ts-ignore
-    if (setOnlyIfUndefined && this[key] !== undefined) {
+    if (setOnlyIfUndefined && this[key] !== void 0) {
       return this;
     }
-    // @ts-ignore
-    this[key] = (0, clone_marshalling_1.cloneMarshalling)(value);
+    this[key] = (0, import_clone_marshalling.cloneMarshalling)(value);
     return this;
   }
   buildAssignAttributes(attributes) {
     let assignAttributes;
-    if ((0, is_object_like_1.checkIsObjectLike)(attributes)) {
-      assignAttributes = (0, class_transformer_1.instanceToPlain)((0, clone_marshalling_1.cloneMarshalling)(attributes));
-    }
-    else {
-      assignAttributes = undefined;
+    if ((0, import_is_object_like.checkIsObjectLike)(attributes)) {
+      assignAttributes = (0, import_class_transformer.instanceToPlain)((0, import_clone_marshalling.cloneMarshalling)(attributes));
+      Object.keys(attributes).forEach((key) => {
+        if (attributes[key] instanceof Date) {
+          const clonedDate = new Date();
+          clonedDate.setTime(attributes[key].getTime());
+          assignAttributes[key] = clonedDate;
+        }
+      });
+    } else {
+      assignAttributes = void 0;
     }
     return assignAttributes;
   }
   buildIncludeKeys(includeKeys) {
     if (!includeKeys || !Array.isArray(includeKeys)) {
-      return undefined;
+      return void 0;
     }
-    const keys = Array.from(new Set(includeKeys).values()).filter(string_1.isString);
+    const keys = Array.from(new Set(includeKeys).values()).filter(import_string.isString);
     if (keys.length === 0) {
-      return undefined;
+      return void 0;
     }
-    return (0, strings_1.arraySortStrings)(keys);
+    return (0, import_strings.arraySortStrings)(keys);
   }
   buildOptions(options) {
     if (!options) {
-      return exports.FILLABLE_DTO_OPTIONS_DEFAULT;
+      return FILLABLE_DTO_OPTIONS_DEFAULT;
     }
-    if (!(0, class_validator_1.isObject)(options)) {
-      return exports.FILLABLE_DTO_OPTIONS_DEFAULT;
+    if (!(0, import_class_validator.isObject)(options)) {
+      return FILLABLE_DTO_OPTIONS_DEFAULT;
     }
     return {
-      class:
-      // @ts-ignore
-        "class" in options && (0, class_validator_1.isBoolean)(options["class"])
-          ? // @ts-ignore
-          options["class"]
-          : exports.FILLABLE_DTO_OPTIONS_DEFAULT.class,
-      prettify:
-      // @ts-ignore
-        "prettify" in options && (0, class_validator_1.isBoolean)(options["prettify"])
-          ? // @ts-ignore
-          options["prettify"]
-          : exports.FILLABLE_DTO_OPTIONS_DEFAULT.prettify,
-      property:
-      // @ts-ignore
-        "property" in options && (0, class_validator_1.isBoolean)(options["property"])
-          ? // @ts-ignore
-          options["property"]
-          : exports.FILLABLE_DTO_OPTIONS_DEFAULT.property,
-      value:
-      // @ts-ignore
-        "value" in options && (0, class_validator_1.isBoolean)(options["value"])
-          ? // @ts-ignore
-          options["value"]
-          : exports.FILLABLE_DTO_OPTIONS_DEFAULT.value,
+      class: "class" in options && (0, import_class_validator.isBoolean)(options["class"]) ? options["class"] : FILLABLE_DTO_OPTIONS_DEFAULT.class,
+      prettify: "prettify" in options && (0, import_class_validator.isBoolean)(options["prettify"]) ? options["prettify"] : FILLABLE_DTO_OPTIONS_DEFAULT.prettify,
+      property: "property" in options && (0, import_class_validator.isBoolean)(options["property"]) ? options["property"] : FILLABLE_DTO_OPTIONS_DEFAULT.property,
+      value: "value" in options && (0, import_class_validator.isBoolean)(options["value"]) ? options["value"] : FILLABLE_DTO_OPTIONS_DEFAULT.value
     };
   }
-}
-exports.FillableDto = FillableDto;
+};
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  FILLABLE_DTO_OPTIONS_DEFAULT,
+  FillableDto,
+  anyValueToPrintableString,
+  validateInstance
+});
